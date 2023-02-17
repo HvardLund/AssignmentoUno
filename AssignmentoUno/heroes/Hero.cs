@@ -2,6 +2,7 @@
 using AssignmentoUno.Utils;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Runtime.Serialization;
 using System.Text;
@@ -11,10 +12,20 @@ namespace AssignmentoUno.heroes
 {
     public abstract class Hero
     {
+        /// <summary>
+        /// Base class for all other Hero-classes. Heroes can equip weapons and armor,
+        /// level up, calculate total attributes and display their state. Damage is calculated in the children
+        /// </summary>
         public string Name { get; set; }
         public int Level { get; set; }
+
+        //Base attributes of a Hero
         public HeroAttributes LevelAttributes { get; set; }
+
+        //Increase in attributes when leveling up
         public HeroAttributes ScaleAttributes { get; set; }
+
+        //Items that are currently equipped by the hero.
         public Dictionary<Slots, Item?> HeroEquipment { get; set; }
         public List<WeaponType> ValidWeaponTypes { get; set; }
         public List<ArmorType> ValidArmorTypes { get; set; }
@@ -30,6 +41,12 @@ namespace AssignmentoUno.heroes
             ScaleAttributes = new HeroAttributes(1, 1, 1);
 
         }
+
+        /// <summary>
+        /// Add a weapon to the weapon slot in HeroEquipment 
+        /// </summary>
+        /// <param name="Weapon"></param>
+        /// <exception cref="InvalidWeaponException"></exception>
         public void Equip(Weapon Weapon)
         {
             
@@ -45,6 +62,12 @@ namespace AssignmentoUno.heroes
             HeroEquipment[Slots.Weapon] = Weapon;
 
         }
+
+        /// <summary>
+        /// Add armor to HeroEquipment
+        /// </summary>
+        /// <param name="Armor"></param>
+        /// <exception cref="InvalidArmorException"></exception>
         public void Equip(Armor Armor)
         {
             if (!ValidArmorTypes.Contains(Armor.TypeOfArmor))
@@ -64,11 +87,26 @@ namespace AssignmentoUno.heroes
 
             HeroEquipment[Armor.Slot] = Armor;
         }
+
+        /// <summary>
+        /// Increase level by one. The increase in LevelAttributes is calculated on the fly in Total_attributes().
+        /// </summary>
+        public void Level_up()
+        {
+            Level++;
+        }
+
+        /// <summary>
+        /// Calculate total attributes based on levelAttributes, scaleAttributes, level and equipped armor. 
+        /// </summary>
+        /// <returns>HeroAttributes object containing the total attributes of a hero based on level and equipped armor </returns>
         public HeroAttributes Total_attributes()
         {
+            //Taking base attributes of a hero (LevelAttributes) and adding the product of scale attributes and times levelled up (level-1)
             HeroAttributes totalAttributes = LevelAttributes + new HeroAttributes(
                 (Level-1) * ScaleAttributes.strength, (Level - 1) * ScaleAttributes.dexterity, (Level - 1) * ScaleAttributes.intelligence);
 
+            //Checking for armor, and adding its attributes to the totalAttributes objects
             foreach(KeyValuePair<Slots, Item?> item in HeroEquipment)
             {
                 if(item.Value is Armor)
@@ -81,11 +119,11 @@ namespace AssignmentoUno.heroes
             return totalAttributes;
 
         }
-        public void Level_up()
-        {
-            Level ++;
-        }
         public abstract double Calculate_Damage();
+        /// <summary>
+        /// Display core data of a hero in a human readable format
+        /// </summary>
+        /// <returns>String containing core data describing a hero's status</returns>
         public string Display()
         {
             StringBuilder sb = new StringBuilder("\n");

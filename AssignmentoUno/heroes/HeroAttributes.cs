@@ -8,6 +8,9 @@ namespace AssignmentoUno.heroes
 {
     public class HeroAttributes
     {
+        /// <summary>
+        /// Base class used to bundle the main attributes of a hero
+        /// </summary>
         public int strength { get; set; }
         public int dexterity { get; set; }
         public int intelligence{ get; set; }

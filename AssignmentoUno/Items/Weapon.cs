@@ -8,6 +8,9 @@ namespace AssignmentoUno.Items
 {
     public class Weapon:Item
     {
+        /// <summary>
+        /// Item equipped in the Weapon slot of a hero's equipment.
+        /// </summary>
         public int WeaponDamage { get; set; }
         public WeaponType TypeOfWeapon { get; set; }
 

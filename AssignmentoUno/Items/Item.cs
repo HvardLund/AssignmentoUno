@@ -8,6 +8,9 @@ namespace AssignmentoUno.Items
 {
     public abstract class Item
     {
+        /// <summary>
+        /// Base class for items. Items are objects that are equippable by heroes
+        /// </summary>
         public string Name { get; set; }
         public int RequiredLevel { get; set; }
         public Slots Slot { get; set; }
